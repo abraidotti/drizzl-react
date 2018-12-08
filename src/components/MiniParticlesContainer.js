@@ -1,16 +1,13 @@
 import React, { Component } from "react";
 import Particles from "react-particles-js";
 
-export default class ParticlesContainer extends Component {
+export default class MiniParticlesContainer extends Component {
   render() {
     return (
       <Particles
         style={{
-        position: "absolute",
-        left: 0,
-        right: 0,
-        bottom: 0,
-        top: 0,
+          position: "relative",
+          width: '50%'
         }}
         params={{
           particles: {
