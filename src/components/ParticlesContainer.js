@@ -40,7 +40,7 @@ export default class ParticlesContainer extends Component {
               }
             },
             opacity: {
-              value: 0.5,
+              value: 0.1,
               random: true,
               anim: {
                 enable: false,

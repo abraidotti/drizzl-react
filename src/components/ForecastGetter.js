@@ -16,6 +16,8 @@ import Input from "@material-ui/core/Input";
 
 import MiniParticlesContainer from "./MiniParticlesContainer";
 
+import CircularProgress from '@material-ui/core/CircularProgress';
+
 import Geocode from "react-geocode";
 Geocode.setApiKey(`${process.env.REACT_APP_GMAPS_API_KEY}`);
 
@@ -53,7 +55,10 @@ const styles = theme => ({
   input: {
     margin: theme.spacing.unit,
     width: 340
-  }
+  },
+  progress: {
+    margin: theme.spacing.unit * 2,
+  },
 });
 
 class ForecastGetter extends React.Component {
@@ -64,6 +69,7 @@ class ForecastGetter extends React.Component {
       expanded: false,
       locationString: "",
       forecast: {},
+      gotResponse: false,
       error: ""
     };
 
@@ -85,6 +91,7 @@ class ForecastGetter extends React.Component {
       Geocode.fromAddress(this.state.locationString)
         .then(response => {
           console.log(response);
+          this.setState({ gotResponse: true });
           fetch(
             `https://sandro-cors.herokuapp.com/https://api.darksky.net/forecast/${
               process.env.REACT_APP_DARKSKY_API_KEY
@@ -101,41 +108,57 @@ class ForecastGetter extends React.Component {
           )
             .then(results => results.json())
             .then(forecast => {
-              this.setState({ forecast: forecast})
-              console.log("forecast:", this.state.forecast)
-            })
+              this.setState({ forecast: forecast });
+              console.log("forecast:", this.state.forecast);
+            });
         })
         .catch(error => console.log(error));
+    } else {
+      this.setState({ error: "Please submit a location." });
     }
   };
 
   render() {
     const { classes } = this.props;
 
+    let locationForm;
+
+    if (!this.state.gotResponse) {
+      locationForm =
+      <div>
+      <Input
+        placeholder="input a location..."
+        className={classes.input}
+        inputProps={{
+          "aria-label": "Description"
+        }}
+        value={this.state.locationString}
+        onChange={this.handleChange}
+        autoFocus
+        isrequired="true"
+      />
+      <Button
+        variant="contained"
+        color="primary"
+        className={classes.button}
+        onClick={this.handleSubmit}
+      >
+        launch!
+      </Button>
+      </div>;
+    } else {
+      locationForm = <CircularProgress className={classes.progress} />;
+    }
+
     return (
       <Card className={classes.card}>
         <CardHeader title="drizzl" subheader="a forecast visualization app" />
         <MiniParticlesContainer />
+
         <CardContent>
-          <Input
-            placeholder="input a location..."
-            className={classes.input}
-            inputProps={{
-              "aria-label": "Description"
-            }}
-            value={this.state.locationString}
-            onChange={this.handleChange}
-            autoFocus
-            isrequired="true"
-          />
-          <Button
-            variant="contained"
-            color="primary"
-            className={classes.button}
-            onClick={this.handleSubmit}
-          >
-            launch!
-          </Button>
+
+          {locationForm}
+
           <Typography paragraph>{this.state.error}</Typography>
         </CardContent>
         <CardActions className={classes.actions} disableActionSpacing>
