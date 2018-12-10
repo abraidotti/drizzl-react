@@ -24,6 +24,7 @@ import Input from "@material-ui/core/Input";
 import MiniParticlesContainer from "./MiniParticlesContainer";
 
 import Geocode from "react-geocode";
+Geocode.setApiKey(`${process.env.REACT_APP_GMAPS_API_KEY}`)
 
 const styles = theme => ({
   button: {
@@ -58,7 +59,7 @@ const styles = theme => ({
   },
   input: {
     margin: theme.spacing.unit,
-    width: 200
+    width: 340
   }
 });
 
@@ -68,11 +69,13 @@ class ForecastGetter extends React.Component {
 
     this.state = {
       expanded: false,
-      lat: 0,
-      lng: 0,
+      location: {},
+      latitude: 0,
+      longitude: 0,
       locationString: '',
       coords: {},
-      value: ''
+      value: '',
+      error: ''
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -80,33 +83,62 @@ class ForecastGetter extends React.Component {
   }
 
   handleExpandClick = () => {
-    this.setState(state => ({ expanded: !state.expanded }));
-  };
-
-  handleChange(event) {
-    this.setState({locationString: event.target.value});
+    this.setState(state => ({ expanded: !state.expanded }))
   }
 
-  handleSubmit(event) {
+  handleChange = (event) => {
+    this.setState({ locationString: event.target.value })
+  }
+
+  handleSubmit = (event) => {
     event.preventDefault()
-    if (this.state.locationString === `${this.state.lat},${this.state.lng}`) {
-      console.log('retrieved location submitted')
+    if (this.state.coords) {
+      Geocode.fromLatLng(`${this.state.coords.latitude}`,`${this.state.coords.longitude}`)
+      .then(
+        response => {
+          this.setState({
+            locationString: response.results[0].formatted_address,
+            coords: response.results[0].geometry.location
+          })
+          console.log(response.results[0]);
+        },
+        error => {
+          console.error(error);
+        }
+      );
+      fetch(
+        `https://sandro-cors.herokuapp.com/https://api.darksky.net/forecast/${process.env.REACT_APP_DARKSKY_API_KEY}/${this.state.latitude},${this.state.longitude}`, {
+          method: 'GET',
+          headers:{
+            'Content-Type': 'application/json'
+          },
+          mode: 'cors'
+        })
+        .then(response => response.json())
+        .then(response => console.log('Success:', JSON.stringify(response)))
+        .catch(error => console.error('Error:', error))
     } else {
-      console.log('A name was submitted: ' + this.state.locationString);
+      console.log('need valid location')
+
+
     }
   }
 
-  componentDidMount() {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(position => {
-        this.setState(state => ({
-          coords: position.coords,
-          lat: position.coords.latitude.toFixed(4),
-          lng: position.coords.longitude.toFixed(4),
-          locationString: `${position.coords.latitude.toFixed(4)},${position.coords.longitude.toFixed(4)}`
-        }))
-      })
-    }
+
+
+  getLocation = () => {
+    navigator.geolocation.getCurrentPosition(
+            (position) => {
+              console.log('got position')
+                this.setState({
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude,
+                    error: 'got location',
+                });
+            },
+            (error) => this.setState({ error: error.message }),
+            { enableHighAccuracy: true, timeout: 20000},
+        );
   }
 
   render() {
@@ -132,29 +164,38 @@ class ForecastGetter extends React.Component {
         <MiniParticlesContainer />
 
         <CardContent>
-          <Typography component="p">Let's start with a location:</Typography>
-          <form onSubmit={this.handleSubmit}>
+
+
             <Input
-              placeholder='waiting for location...'
+              placeholder='input a location...'
               className={classes.input}
               inputProps={{
                 "aria-label": "Description"
               }}
               value={this.state.locationString}
               onChange={this.handleChange}
+              autoFocus
+              isrequired='true'
             />
-
-
+            <Button
+              variant="contained"
+              color="secondary"
+              className={classes.button}
+              onClick={this.getLocation}
+            >
+              get my location
+            </Button>
             <Button
               variant="contained"
               color="primary"
               className={classes.button}
-              type="submit"
-              value="Submit"
+              onSubmit={this.handleSubmit}
             >
-              drizzl it!
+              launch!
             </Button>
-          </form>
+            <Typography paragraph>{ this.state.error }</Typography>
+
+
         </CardContent>
         <CardActions className={classes.actions} disableActionSpacing>
           <IconButton aria-label="Add to favorites">
