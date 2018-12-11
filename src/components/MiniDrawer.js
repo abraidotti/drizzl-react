@@ -235,8 +235,8 @@ class MiniDrawer extends React.Component {
         <main className={classes.content}>
           <div className={classes.toolbar} />
 
-          <CircularProgress className={classes.progress} />
-          {/* <ParticlesContainer /> */}
+          
+          <ParticlesContainer />
         </main>
       </div>
     )

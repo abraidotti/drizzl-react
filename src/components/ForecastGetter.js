@@ -108,8 +108,8 @@ class ForecastGetter extends React.Component {
           )
             .then(results => results.json())
             .then(forecast => {
-              this.setState({ forecast: forecast });
-              console.log("forecast:", this.state.forecast);
+              console.log(forecast)
+              this.props.sendForecast(forecast)
             });
         })
         .catch(error => console.log(error));
@@ -186,7 +186,8 @@ class ForecastGetter extends React.Component {
 }
 
 ForecastGetter.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  sendForecast: PropTypes.func.isRequired
 };
 
 export default withStyles(styles)(ForecastGetter);
