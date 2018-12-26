@@ -68,7 +68,6 @@ class ForecastGetter extends React.Component {
     this.state = {
       expanded: false,
       locationString: "",
-      forecast: {},
       gotResponse: false,
       error: ""
     };
@@ -90,14 +89,13 @@ class ForecastGetter extends React.Component {
     if (this.state.locationString) {
       Geocode.fromAddress(this.state.locationString)
         .then(response => {
-          console.log(response);
           this.setState({ gotResponse: true });
           fetch(
             `https://sandro-cors.herokuapp.com/https://api.darksky.net/forecast/${
               process.env.REACT_APP_DARKSKY_API_KEY
             }/${response.results[0].geometry.location.lat},${
               response.results[0].geometry.location.lng
-            }`,
+            }?exclude=minutely,hourly,daily,alerts,flags`,
             {
               method: "GET",
               headers: {
@@ -108,8 +106,7 @@ class ForecastGetter extends React.Component {
           )
             .then(results => results.json())
             .then(forecast => {
-              console.log(forecast)
-              this.props.sendForecast(forecast)
+              this.props.sendForecast(forecast.currently)
             });
         })
         .catch(error => console.log(error));

@@ -18,9 +18,6 @@ import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 import InboxIcon from '@material-ui/icons/MoveToInbox'
 import MailIcon from '@material-ui/icons/Mail'
-import CircularProgress from '@material-ui/core/CircularProgress'
-import SearchIcon from '@material-ui/icons/Search';
-import InputBase from '@material-ui/core/InputBase';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 
 import ParticlesContainer from './ParticlesContainer'
@@ -139,8 +136,20 @@ const styles = theme => ({
 })
 
 class MiniDrawer extends React.Component {
-  state = {
-    open: false,
+  constructor(props){
+    super(props)
+    this.state = {
+      open: false,
+      forecast: this.props.forecast,
+      particleData: {
+        numberOfParticles: this.props.forecast.apparentTemperature,
+        string: 'cheese'
+      }
+    }
+  }
+
+  componentDidMount(){
+    console.log(this.state.forecast)
   }
 
   handleDrawerOpen = () => {
@@ -179,18 +188,7 @@ class MiniDrawer extends React.Component {
             </Typography>
 
             <div className={classes.grow} />
-          <div className={classes.search}>
-            <div className={classes.searchIcon}>
-              <SearchIcon />
-            </div>
-            <InputBase
-              placeholder="Search…"
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
-            />
-          </div>
+
 
           </Toolbar>
         </AppBar>
@@ -234,9 +232,9 @@ class MiniDrawer extends React.Component {
         </Drawer>
         <main className={classes.content}>
           <div className={classes.toolbar} />
-
-          
-          <ParticlesContainer />
+          <ParticlesContainer
+            forecast={this.state.forecast}
+            data={this.state.particleData} />
         </main>
       </div>
     )

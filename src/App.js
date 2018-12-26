@@ -21,17 +21,17 @@ class App extends Component {
   }
 
   render() {
-    let activeComponents;
+    let activeComponent;
 
     if (!this.state.gotForecast) {
-      activeComponents = <div><ParticlesContainer /><ForecastGetter sendForecast={this.getForecast} /></div>
+      activeComponent = <div><ForecastGetter sendForecast={this.getForecast} /></div>
     } else {
-      activeComponents = <MiniDrawer />;
+      activeComponent = <MiniDrawer forecast={this.state.forecast}/>;
     }
 
     return (
       <div >
-        {activeComponents}
+        {activeComponent}
       </div>
     );
   }

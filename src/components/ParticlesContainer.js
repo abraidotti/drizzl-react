@@ -2,6 +2,15 @@ import React, { Component } from "react";
 import Particles from "react-particles-js";
 
 export default class ParticlesContainer extends Component {
+  constructor(props){
+    super(props)
+  }
+
+  componentDidMount(){
+    console.log(this.props.data.numberOfParticles)
+  }
+
+
   render() {
     return (
       <Particles
@@ -15,7 +24,7 @@ export default class ParticlesContainer extends Component {
         params={{
           particles: {
             number: {
-              value: 400,
+              value: this.props.data.numberOfParticles,
               density: {
                 enable: true,
                 value_area: 800
