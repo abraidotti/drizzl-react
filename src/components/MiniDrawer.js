@@ -161,12 +161,26 @@ class MiniDrawer extends React.Component {
     this.setState({ open: false })
   }
 
+  toggleClickMode = () => {
+    let currentMode = this.state.particleData.interactivity.events.onclick.mode
+    let modes = Object.keys(this.state.particleData.interactivity.modes)
+    let nextMode = modes[( modes.indexOf(currentMode) + 1) % modes.length]
+
+    if (nextMode === "bubble") nextMode = modes[( modes.indexOf(currentMode) + 2) % modes.length]
+
+    const newState = this.state.particleData
+    newState.interactivity.events.onclick.mode = nextMode
+    this.setState({ particleData: newState })
+  }
+
   toggleHoverMode = () => {
-    console.log(this.state.particleData.interactivity.events.onhover.mode)
-    console.log(Object.keys(this.state.particleData.interactivity.modes))
+    let currentMode = this.state.particleData.interactivity.events.onhover.mode
+    let modes = Object.keys(this.state.particleData.interactivity.modes)
+    let nextMode = modes[( modes.indexOf(currentMode) + 1) % modes.length]
 
-
-
+    const newState = this.state.particleData
+    newState.interactivity.events.onhover.mode = nextMode
+    this.setState({ particleData: newState })
   }
 
   handleLineLinks = () => {
@@ -246,9 +260,14 @@ class MiniDrawer extends React.Component {
                 <ListItemText primary={text} />
               </ListItem>
             ))}
+            <ListItem button onClick={this.toggleClickMode}>
+              <ListItemIcon><CursorPointer/></ListItemIcon>
+              <ListItemText primary="When you click"
+                secondary={this.state.particleData.interactivity.events.onclick.mode} />
+            </ListItem>
             <ListItem button onClick={this.toggleHoverMode}>
               <ListItemIcon><CursorPointer/></ListItemIcon>
-              <ListItemText primary="Hover Mode"
+              <ListItemText primary="When you hover"
                 secondary={this.state.particleData.interactivity.events.onhover.mode} />
             </ListItem>
           </List>
