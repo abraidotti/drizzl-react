@@ -10,9 +10,9 @@ import CardActions from "@material-ui/core/CardActions";
 import Collapse from "@material-ui/core/Collapse";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
-import red from "@material-ui/core/colors/red";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Input from "@material-ui/core/Input";
+import { GithubCircle } from 'mdi-material-ui'
 
 import MiniParticlesContainer from "./MiniParticlesContainer";
 
@@ -23,10 +23,11 @@ Geocode.setApiKey(`${process.env.REACT_APP_GMAPS_API_KEY}`);
 
 const styles = theme => ({
   button: {
-    margin: theme.spacing.unit
+    margin: theme.spacing.unit,
+    float: "right"
   },
   card: {
-    maxWidth: 400,
+    maxWidth: 360,
     margin: "50px auto"
   },
   media: {
@@ -49,16 +50,18 @@ const styles = theme => ({
   expandOpen: {
     transform: "rotate(180deg)"
   },
-  avatar: {
-    backgroundColor: red[500]
-  },
   input: {
     margin: theme.spacing.unit,
-    width: 340
+    float: "left",
+    width: 320
   },
   progress: {
     margin: theme.spacing.unit * 2,
+    float: "right"
   },
+  octicon: {
+    marginBottom: "-5px"
+  }
 });
 
 class ForecastGetter extends React.Component {
@@ -89,7 +92,7 @@ class ForecastGetter extends React.Component {
     if (this.state.locationString) {
       Geocode.fromAddress(this.state.locationString)
         .then(response => {
-          this.setState({ gotResponse: true });
+          this.setState({ gotResponse: true, error: "" });
           fetch(
             `https://sandro-cors.herokuapp.com/https://api.darksky.net/forecast/${
               process.env.REACT_APP_DARKSKY_API_KEY
@@ -109,7 +112,10 @@ class ForecastGetter extends React.Component {
               this.props.sendForecast(forecast.currently)
             });
         })
-        .catch(error => console.log(error));
+        .catch(error => {
+          console.log(error)
+          this.setState({ error: "Please try another location." })
+        })
     } else {
       this.setState({ error: "Please submit a location." });
     }
@@ -140,7 +146,7 @@ class ForecastGetter extends React.Component {
         className={classes.button}
         onClick={this.handleSubmit}
       >
-        launch!
+        launch
       </Button>
       </div>;
     } else {
@@ -173,8 +179,13 @@ class ForecastGetter extends React.Component {
         </CardActions>
         <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
           <CardContent>
-            <Typography paragraph>about:</Typography>
-            <Typography paragraph>Made with material ui</Typography>
+            <Typography variant="h6" gutterBottom>
+              <a href="https://abraidotti.github.io" target="blank">© Sandro Braidotti</a>
+              <a href="https://github.com/abraidotti/drizzl-react" target="blank">
+                <GithubCircle className={ classes.octicon }/>
+              </a>
+            </Typography>
+            <Typography paragraph>Made with React and Material-UI</Typography>
           </CardContent>
         </Collapse>
       </Card>
