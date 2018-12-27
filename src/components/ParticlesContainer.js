@@ -10,11 +10,12 @@ export default class ParticlesContainer extends Component {
     return (
       <Particles
         style={{
-        position: "absolute",
-        left: 0,
-        right: 0,
-        bottom: 0,
-        top: 0,
+          backgroundColor: "#282C34",
+          position: "absolute",
+          left: 0,
+          right: 0,
+          bottom: 0,
+          top: 0,
         }}
         params={this.props.params}
       />

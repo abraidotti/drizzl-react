@@ -20,7 +20,7 @@ import InboxIcon from '@material-ui/icons/MoveToInbox'
 import MailIcon from '@material-ui/icons/Mail'
 import { fade } from '@material-ui/core/styles/colorManipulator'
 
-import { ChemicalWeapon } from 'mdi-material-ui'
+import { ChemicalWeapon, Album, CursorPointer } from 'mdi-material-ui'
 import * as baseParticleParams from '../utilities/baseParticleParams'
 
 import ParticlesContainer from './ParticlesContainer'
@@ -143,13 +143,13 @@ class MiniDrawer extends React.Component {
     super(props)
     this.state = {
       open: false,
-      forecast: this.props.forecast,
+      lineLinksActive: false,
       particleData: baseParticleParams
     }
   }
 
   componentDidMount(){
-    console.log('forecast in MiniDrawer', this.state.forecast)
+    console.log('forecast in MiniDrawer', this.props.forecast)
     console.log('params in state', this.state.particleData)
   }
 
@@ -161,10 +161,33 @@ class MiniDrawer extends React.Component {
     this.setState({ open: false })
   }
 
-  handleUmbilicalDrawDistance = () => {
+  toggleHoverMode = () => {
+    console.log(this.state.particleData.interactivity.events.onhover.mode)
+    console.log(Object.keys(this.state.particleData.interactivity.modes))
+
 
 
   }
+
+  handleLineLinks = () => {
+    const newState = this.state.particleData
+
+    if (!this.state.lineLinksActive) {
+        newState.particles.line_linked.enable = true
+        newState.particles.line_linked.distance = this.props.forecast.nearestStormDistance
+        this.setState({
+          particleData: newState,
+          lineLinksActive: true
+        })
+    } else {
+        newState.particles.line_linked.enable = false
+        this.setState({
+          particleData: newState,
+          lineLinksActive: false
+        })
+    }
+  }
+
 
   render() {
     const { classes, theme } = this.props
@@ -223,18 +246,21 @@ class MiniDrawer extends React.Component {
                 <ListItemText primary={text} />
               </ListItem>
             ))}
+            <ListItem button onClick={this.toggleHoverMode}>
+              <ListItemIcon><CursorPointer/></ListItemIcon>
+              <ListItemText primary="Hover Mode"
+                secondary={this.state.particleData.interactivity.events.onhover.mode} />
+            </ListItem>
           </List>
           <Divider />
           <List>
-            {['All mail', 'Trash', 'Spam'].map((text, index) => (
-              <ListItem button key={text}>
-                <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItem>
-            ))}
-            <ListItem button onClick={this.handleUmbilicalDrawDistance}>
+            <ListItem button onClick={this.handleLineLinks}>
               <ListItemIcon><ChemicalWeapon/></ListItemIcon>
-              <ListItemText primary="umbilical length" />
+              <ListItemText primary="Line Links" secondary="nearest storm distance" />
+            </ListItem>
+            <ListItem button onClick={this.handleLineLinks}>
+              <ListItemIcon><Album/></ListItemIcon>
+              <ListItemText primary="Line Links" secondary="nearest storm distance" />
             </ListItem>
           </List>
         </Drawer>

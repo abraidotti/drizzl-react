@@ -6,6 +6,7 @@ export default class MiniParticlesContainer extends Component {
     return (
       <Particles
         style={{
+          backgroundColor: "#282C34",
           position: "relative",
           width: '50%'
         }}

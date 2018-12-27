@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ForecastGetter from './components/ForecastGetter'
 import MiniDrawer from './components/MiniDrawer'
+import './index.css';
 
 class App extends Component {
   constructor(props) {
@@ -12,7 +13,7 @@ class App extends Component {
     this.getForecast = this.getForecast.bind(this);
   }
 
-    getForecast(forecastObject){
+    getForecast = (forecastObject) => {
       this.setState({
         forecast: forecastObject,
         gotForecast: true
@@ -29,7 +30,7 @@ class App extends Component {
     }
 
     return (
-      <div >
+      <div>
         {activeComponent}
       </div>
     );

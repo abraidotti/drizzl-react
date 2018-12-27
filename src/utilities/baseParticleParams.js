@@ -1,7 +1,7 @@
 module.exports = {
   "particles": {
     "number": {
-      "value": 400,
+      "value": 100,
       "density": {
         "enable": true,
         "value_area": 800
@@ -48,7 +48,7 @@ module.exports = {
     "line_linked": {
       "enable": false,
       "distance": 500,
-      "color": "#ffffff",
+      "color": "#666",
       "opacity": 0.4,
       "width": 2
     },
@@ -72,7 +72,7 @@ module.exports = {
     "events": {
       "onhover": {
         "enable": true,
-        "mode": "bubble"
+        "mode": "grab"
       },
       "onclick": {
         "enable": true,
