@@ -18,7 +18,10 @@ import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 import InboxIcon from '@material-ui/icons/MoveToInbox'
 import MailIcon from '@material-ui/icons/Mail'
-import { fade } from '@material-ui/core/styles/colorManipulator';
+import { fade } from '@material-ui/core/styles/colorManipulator'
+
+import { ChemicalWeapon } from 'mdi-material-ui'
+import * as baseParticleParams from '../utilities/baseParticleParams'
 
 import ParticlesContainer from './ParticlesContainer'
 
@@ -141,15 +144,13 @@ class MiniDrawer extends React.Component {
     this.state = {
       open: false,
       forecast: this.props.forecast,
-      particleData: {
-        numberOfParticles: this.props.forecast.apparentTemperature,
-        string: 'cheese'
-      }
+      particleData: baseParticleParams
     }
   }
 
   componentDidMount(){
-    console.log(this.state.forecast)
+    console.log('forecast in MiniDrawer', this.state.forecast)
+    console.log('params in state', this.state.particleData)
   }
 
   handleDrawerOpen = () => {
@@ -158,6 +159,11 @@ class MiniDrawer extends React.Component {
 
   handleDrawerClose = () => {
     this.setState({ open: false })
+  }
+
+  handleUmbilicalDrawDistance = () => {
+
+
   }
 
   render() {
@@ -186,10 +192,7 @@ class MiniDrawer extends React.Component {
             <Typography variant="h6" color="inherit" noWrap>
               drizzl
             </Typography>
-
             <div className={classes.grow} />
-
-
           </Toolbar>
         </AppBar>
         <Drawer
@@ -212,6 +215,7 @@ class MiniDrawer extends React.Component {
             </IconButton>
           </div>
           <Divider />
+
           <List>
             {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
               <ListItem button key={text}>
@@ -228,13 +232,18 @@ class MiniDrawer extends React.Component {
                 <ListItemText primary={text} />
               </ListItem>
             ))}
+            <ListItem button onClick={this.handleUmbilicalDrawDistance}>
+              <ListItemIcon><ChemicalWeapon/></ListItemIcon>
+              <ListItemText primary="umbilical length" />
+            </ListItem>
           </List>
         </Drawer>
         <main className={classes.content}>
           <div className={classes.toolbar} />
-          <ParticlesContainer
-            forecast={this.state.forecast}
-            data={this.state.particleData} />
+
+            <ParticlesContainer
+              params={this.state.particleData} />
+
         </main>
       </div>
     )
