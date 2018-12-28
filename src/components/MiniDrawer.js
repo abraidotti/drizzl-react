@@ -157,6 +157,15 @@ class MiniDrawer extends React.Component {
     }
   }
 
+<<<<<<< HEAD
+=======
+  componentDidMount(){
+
+    console.log('forecast in MiniDrawer', this.props.forecast)
+    console.log('params in state', this.state.particleData)
+  }
+
+>>>>>>> 51410972b269b00a41d330412d73714c0f20eee2
   handleDrawerOpen = () => {
     this.setState({ open: true })
   }

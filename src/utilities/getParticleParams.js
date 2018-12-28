@@ -4,7 +4,8 @@ export function getParticleParams(forecast) {
   let params = baseParticleParams
 
   params.particles.number.value = Math.abs(Math.round(3 * forecast.temperature))
-  
+  console.log(params.particles.number.value)
+
   console.log('adjusted params in getParticleParams', params)
   console.log('forecast in getParticleParams', forecast)
 
