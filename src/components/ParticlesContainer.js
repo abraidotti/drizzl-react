@@ -2,10 +2,6 @@ import React, { Component } from "react";
 import Particles from "react-particles-js";
 
 export default class ParticlesContainer extends Component {
-  componentDidMount(){
-    console.log('params in particles container', this.props.params)
-  }
-
   render() {
     return (
       <Particles

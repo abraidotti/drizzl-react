@@ -14,6 +14,8 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Input from "@material-ui/core/Input";
 import { GithubCircle } from 'mdi-material-ui'
 
+import { getParticleParams } from '../utilities/getParticleParams';
+
 import MiniParticlesContainer from "./MiniParticlesContainer";
 
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -96,7 +98,6 @@ class ForecastGetter extends React.Component {
     if (this.state.locationString) {
       Geocode.fromAddress(this.state.locationString)
         .then(response => {
-          console.log('location response', response)
           this.setState({
             formattedAddress: response.results[0].formatted_address,
             gotResponse: true,
@@ -117,7 +118,8 @@ class ForecastGetter extends React.Component {
           )
             .then(results => results.json())
             .then(forecast => {
-              this.props.sendForecast(forecast.currently, this.state.formattedAddress)
+              let currentParticleParams = getParticleParams(forecast.currently)
+              this.props.sendForecast(this.state.formattedAddress, forecast.currently, currentParticleParams)
             });
         })
         .catch(error => {

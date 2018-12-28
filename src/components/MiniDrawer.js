@@ -24,7 +24,7 @@ import * as baseParticleParams from '../utilities/baseParticleParams'
 
 import ParticlesContainer from './ParticlesContainer'
 
-const drawerWidth = 240
+const drawerWidth = 280
 
 const styles = theme => ({
   root: {
@@ -152,14 +152,9 @@ class MiniDrawer extends React.Component {
     this.state = {
       open: false,
       lineLinksActive: false,
-      particleBackgroundColor: "#282C34",
+      particleBackgroundColor: `hsl(${Math.abs(Math.round(2 * this.props.forecast.temperature))}, 10%, 10%)`,
       particleData: baseParticleParams
     }
-  }
-
-  componentDidMount(){
-    console.log('forecast in MiniDrawer', this.props.forecast)
-    console.log('params in state', this.state.particleData)
   }
 
   handleDrawerOpen = () => {
@@ -213,23 +208,23 @@ class MiniDrawer extends React.Component {
 
   changeParticleColor = () => {
     const newState = this.state.particleData
-
-    newState.particles.color.value = {r:182, g:25, b:36}
-
+    newState.particles.color.value = "#FF0000"
     this.setState({ particleData: newState })
+    console.log("TODO: fix particle color changer")
   }
 
   changeParticleSize = () => {
-    console.log('change particle size')
+    console.log('TODO: change particle size')
   }
 
   changeBackgroundColor = () => {
-    const hslString =
-    `hsla(
-      ${this.props.forecast.windBearing},
-      ${this.props.forecast.windGust}%,
-      ${this.props.forecast.windSpeed}%,
-      0.3)`
+    const hslString = `hsla(
+      ${Math.abs(Math.round(this.props.forecast.windBearing))},
+      ${Math.abs(Math.round(100 - this.props.forecast.windGust))}%,
+      ${Math.abs(Math.round(100 - this.props.forecast.windSpeed))}%,
+      ${Math.random().toFixed(2)}
+      )`
+      console.log('hsl color', hslString)
 
     this.setState({ particleBackgroundColor: hslString })
   }
@@ -298,7 +293,7 @@ class MiniDrawer extends React.Component {
                   secondary={this.props.address} />
               </ListItem>
             </Hidden>
-            <ListItem button onClick={this.toggleLineLinks}>
+            <ListItem button variant="outlined" onClick={this.toggleLineLinks}>
               <ListItemIcon><ChemicalWeapon /></ListItemIcon>
               <ListItemText primary="Line Links" secondary={`closest storm: ${this.props.forecast.nearestStormDistance} miles`} />
             </ListItem>
