@@ -9,26 +9,34 @@ class App extends Component {
     this.state = {
       formattedAddress: "",
       forecast: {},
-      gotForecast: false
+      gotForecastAndParticleParams: false,
+      particleParams: {}
     }
     this.getForecast = this.getForecast.bind(this);
   }
 
-    getForecast = (forecastObject, addressString) => {
+    getForecast = (addressString, forecastObject, paramsObject) => {
       this.setState({
         formattedAddress: addressString,
         forecast: forecastObject,
-        gotForecast: true
+        gotForecastAndParticleParams: true,
+        particleParams: paramsObject
       });
   }
 
   render() {
     let activeComponent;
 
-    if (!this.state.gotForecast) {
-      activeComponent = <div><ForecastGetter sendForecast={this.getForecast} /></div>
+    if (!this.state.gotForecastAndParticleParams) {
+      activeComponent = <ForecastGetter
+                          sendForecast={this.getForecast}
+                        />
     } else {
-      activeComponent = <MiniDrawer forecast={this.state.forecast} address={this.state.formattedAddress}/>;
+      activeComponent = <MiniDrawer
+                          forecast={this.state.forecast}
+                          address={this.state.formattedAddress}
+                          params={this.state.particleParams}
+                        />;
     }
 
     return (
