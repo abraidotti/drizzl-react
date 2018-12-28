@@ -46,7 +46,13 @@ const styles = theme => ({
     }),
   },
   appBarTitle: {
-    fontFamily: "'Lily Script One', cursive"
+    fontFamily: "'Lily Script One', cursive",
+    flexGrow: 1,
+    float: "right"
+  },
+  appBarInfo: {
+    flexGrow: 1,
+    float: "right"
   },
   menuButton: {
     marginLeft: 12,
@@ -252,11 +258,13 @@ class MiniDrawer extends React.Component {
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant="h4" color="inherit" noWrap className={classNames(classes.appBarTitle)}>
+            <Typography variant="h4" color="inherit" noWrap className={classes.appBarTitle}>
               drizzl.
             </Typography>
             <Hidden only="xs">
-              <Typography variant="h6" color="textSecondary">{this.props.address}</Typography>
+              <Typography variant="h6" color="textSecondary" className={classes.appBarInfo}>
+                {this.props.forecast.summary} at {this.props.address}
+              </Typography>
             </Hidden>
             <div className={classes.grow} />
           </Toolbar>
