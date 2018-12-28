@@ -55,6 +55,9 @@ const styles = theme => ({
     float: "left",
     width: 320
   },
+  buttonText: {
+    fontFamily: "'Lily Script One', cursive"
+  },
   progress: {
     margin: theme.spacing.unit * 2,
     float: "right"
@@ -71,6 +74,7 @@ class ForecastGetter extends React.Component {
     this.state = {
       expanded: false,
       locationString: "",
+      formattedAddress: "",
       gotResponse: false,
       error: ""
     };
@@ -92,7 +96,11 @@ class ForecastGetter extends React.Component {
     if (this.state.locationString) {
       Geocode.fromAddress(this.state.locationString)
         .then(response => {
-          this.setState({ gotResponse: true, error: "" });
+          console.log('location response', response)
+          this.setState({
+            formattedAddress: response.results[0].formatted_address,
+            gotResponse: true,
+            error: "" });
           fetch(
             `https://sandro-cors.herokuapp.com/https://api.darksky.net/forecast/${
               process.env.REACT_APP_DARKSKY_API_KEY
@@ -109,7 +117,7 @@ class ForecastGetter extends React.Component {
           )
             .then(results => results.json())
             .then(forecast => {
-              this.props.sendForecast(forecast.currently)
+              this.props.sendForecast(forecast.currently, this.state.formattedAddress)
             });
         })
         .catch(error => {

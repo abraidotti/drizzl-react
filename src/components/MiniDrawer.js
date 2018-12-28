@@ -6,6 +6,7 @@ import Drawer from '@material-ui/core/Drawer'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import List from '@material-ui/core/List'
+import Hidden from '@material-ui/core/Hidden';
 import CssBaseline from '@material-ui/core/CssBaseline'
 import Typography from '@material-ui/core/Typography'
 import Divider from '@material-ui/core/Divider'
@@ -16,11 +17,9 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
-import InboxIcon from '@material-ui/icons/MoveToInbox'
-import MailIcon from '@material-ui/icons/Mail'
 import { fade } from '@material-ui/core/styles/colorManipulator'
 
-import { ChemicalWeapon, Album, CursorPointer } from 'mdi-material-ui'
+import { Album, ChemicalWeapon, CursorPointer, FormatColorFill, Palette } from 'mdi-material-ui'
 import * as baseParticleParams from '../utilities/baseParticleParams'
 
 import ParticlesContainer from './ParticlesContainer'
@@ -45,6 +44,9 @@ const styles = theme => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
+  },
+  appBarTitle: {
+    fontFamily: "'Lily Script One', cursive"
   },
   menuButton: {
     marginLeft: 12,
@@ -144,6 +146,7 @@ class MiniDrawer extends React.Component {
     this.state = {
       open: false,
       lineLinksActive: false,
+      particleBackgroundColor: "#282C34",
       particleData: baseParticleParams
     }
   }
@@ -183,7 +186,7 @@ class MiniDrawer extends React.Component {
     this.setState({ particleData: newState })
   }
 
-  handleLineLinks = () => {
+  toggleLineLinks = () => {
     const newState = this.state.particleData
 
     if (!this.state.lineLinksActive) {
@@ -200,6 +203,29 @@ class MiniDrawer extends React.Component {
           lineLinksActive: false
         })
     }
+  }
+
+  changeParticleColor = () => {
+    const newState = this.state.particleData
+
+    newState.particles.color.value = {r:182, g:25, b:36}
+
+    this.setState({ particleData: newState })
+  }
+
+  changeParticleSize = () => {
+    console.log('change particle size')
+  }
+
+  changeBackgroundColor = () => {
+    const hslString =
+    `hsla(
+      ${this.props.forecast.windBearing},
+      ${this.props.forecast.windGust}%,
+      ${this.props.forecast.windSpeed}%,
+      0.3)`
+
+    this.setState({ particleBackgroundColor: hslString })
   }
 
 
@@ -226,9 +252,12 @@ class MiniDrawer extends React.Component {
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant="h6" color="inherit" noWrap>
-              drizzl
+            <Typography variant="h4" color="inherit" noWrap className={classNames(classes.appBarTitle)}>
+              drizzl.
             </Typography>
+            <Hidden only="xs">
+              <Typography variant="h6" color="textSecondary">{this.props.address}</Typography>
+            </Hidden>
             <div className={classes.grow} />
           </Toolbar>
         </AppBar>
@@ -254,39 +283,51 @@ class MiniDrawer extends React.Component {
           <Divider />
 
           <List>
-            {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-              <ListItem button key={text}>
-                <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                <ListItemText primary={text} />
+            <Hidden only={['sm', 'md', 'lg', 'xl']}>
+              <ListItem >
+                <ListItemIcon><CursorPointer /></ListItemIcon>
+                <ListItemText primary="Results for:"
+                  secondary={this.props.address} />
               </ListItem>
-            ))}
+            </Hidden>
+            <ListItem button onClick={this.toggleLineLinks}>
+              <ListItemIcon><ChemicalWeapon /></ListItemIcon>
+              <ListItemText primary="Line Links" secondary={`closest storm: ${this.props.forecast.nearestStormDistance} miles`} />
+            </ListItem>
+            <ListItem button onClick={this.changeParticleSize}>
+              <ListItemIcon><Album /></ListItemIcon>
+              <ListItemText primary="Particle Size" secondary="particle size" />
+            </ListItem>
+            <ListItem button onClick={this.changeParticleColor}>
+              <ListItemIcon><Palette /></ListItemIcon>
+              <ListItemText primary="Particle Color" secondary="particle color" />
+            </ListItem>
+            <ListItem button onClick={this.changeBackgroundColor}>
+              <ListItemIcon><FormatColorFill /></ListItemIcon>
+              <ListItemText primary="Background Color" secondary="based on wind speeds" />
+            </ListItem>
+
+          </List>
+          <Divider />
+          <List>
             <ListItem button onClick={this.toggleClickMode}>
-              <ListItemIcon><CursorPointer/></ListItemIcon>
+              <ListItemIcon><CursorPointer /></ListItemIcon>
               <ListItemText primary="When you click"
                 secondary={this.state.particleData.interactivity.events.onclick.mode} />
             </ListItem>
             <ListItem button onClick={this.toggleHoverMode}>
-              <ListItemIcon><CursorPointer/></ListItemIcon>
+              <ListItemIcon><CursorPointer /></ListItemIcon>
               <ListItemText primary="When you hover"
                 secondary={this.state.particleData.interactivity.events.onhover.mode} />
             </ListItem>
-          </List>
-          <Divider />
-          <List>
-            <ListItem button onClick={this.handleLineLinks}>
-              <ListItemIcon><ChemicalWeapon/></ListItemIcon>
-              <ListItemText primary="Line Links" secondary="nearest storm distance" />
-            </ListItem>
-            <ListItem button onClick={this.handleLineLinks}>
-              <ListItemIcon><Album/></ListItemIcon>
-              <ListItemText primary="Line Links" secondary="nearest storm distance" />
-            </ListItem>
+
           </List>
         </Drawer>
         <main className={classes.content}>
           <div className={classes.toolbar} />
 
             <ParticlesContainer
+              backgroundColor={this.state.particleBackgroundColor}
               params={this.state.particleData} />
 
         </main>

@@ -7,14 +7,16 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      formattedAddress: "",
       forecast: {},
       gotForecast: false
     }
     this.getForecast = this.getForecast.bind(this);
   }
 
-    getForecast = (forecastObject) => {
+    getForecast = (forecastObject, addressString) => {
       this.setState({
+        formattedAddress: addressString,
         forecast: forecastObject,
         gotForecast: true
       });
@@ -26,7 +28,7 @@ class App extends Component {
     if (!this.state.gotForecast) {
       activeComponent = <div><ForecastGetter sendForecast={this.getForecast} /></div>
     } else {
-      activeComponent = <MiniDrawer forecast={this.state.forecast}/>;
+      activeComponent = <MiniDrawer forecast={this.state.forecast} address={this.state.formattedAddress}/>;
     }
 
     return (

@@ -10,7 +10,7 @@ export default class ParticlesContainer extends Component {
     return (
       <Particles
         style={{
-          backgroundColor: "#282C34",
+          backgroundColor: this.props.backgroundColor,
           position: "absolute",
           left: 0,
           right: 0,
