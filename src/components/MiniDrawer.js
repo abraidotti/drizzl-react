@@ -263,7 +263,7 @@ class MiniDrawer extends React.Component {
             </Typography>
             <Hidden only="xs">
               <Typography variant="h6" color="textSecondary" className={classes.appBarInfo}>
-                {this.props.forecast.summary} at {this.props.address}
+                {this.props.forecast.summary} at {this.props.address} on {new Date(this.props.forecast.time * 1000).toUTCString()}
               </Typography>
             </Hidden>
             <div className={classes.grow} />
