@@ -3,6 +3,8 @@ import Particles from "react-particles-js";
 
 export default class ParticlesContainer extends Component {
   render() {
+
+    console.log(this.props.params)
     return (
       <Particles
         style={{

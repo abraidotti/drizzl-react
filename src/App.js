@@ -35,7 +35,7 @@ class App extends Component {
       activeComponent = <MiniDrawer
                           forecast={this.state.forecast}
                           address={this.state.formattedAddress}
-                          params={this.state.particleParams}
+                          particleParams={this.state.particleParams}
                         />;
     }
 

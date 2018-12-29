@@ -20,7 +20,6 @@ import ListItemText from '@material-ui/core/ListItemText'
 import { fade } from '@material-ui/core/styles/colorManipulator'
 
 import { Album, ChemicalWeapon, CursorPointer, FormatColorFill, Palette } from 'mdi-material-ui'
-import * as baseParticleParams from '../utilities/baseParticleParams'
 
 import ParticlesContainer from './ParticlesContainer'
 
@@ -153,19 +152,10 @@ class MiniDrawer extends React.Component {
       open: false,
       lineLinksActive: false,
       particleBackgroundColor: `hsl(${Math.abs(Math.round(2 * this.props.forecast.temperature))}, 10%, 10%)`,
-      particleData: baseParticleParams
+      particleParams: this.props.particleParams
     }
   }
 
-<<<<<<< HEAD
-=======
-  componentDidMount(){
-
-    console.log('forecast in MiniDrawer', this.props.forecast)
-    console.log('params in state', this.state.particleData)
-  }
-
->>>>>>> 51410972b269b00a41d330412d73714c0f20eee2
   handleDrawerOpen = () => {
     this.setState({ open: true })
   }
@@ -175,55 +165,57 @@ class MiniDrawer extends React.Component {
   }
 
   toggleClickMode = () => {
-    let currentMode = this.state.particleData.interactivity.events.onclick.mode
-    let modes = Object.keys(this.state.particleData.interactivity.modes)
+    let currentMode = this.state.particleParams.interactivity.events.onclick.mode
+    let modes = Object.keys(this.state.particleParams.interactivity.modes)
     let nextMode = modes[( modes.indexOf(currentMode) + 1) % modes.length]
 
     if (nextMode === "bubble") nextMode = modes[( modes.indexOf(currentMode) + 2) % modes.length]
 
-    const newState = this.state.particleData
+    const newState = this.state.particleParams
     newState.interactivity.events.onclick.mode = nextMode
-    this.setState({ particleData: newState })
+    this.setState({ particleParams: newState })
   }
 
   toggleHoverMode = () => {
-    let currentMode = this.state.particleData.interactivity.events.onhover.mode
-    let modes = Object.keys(this.state.particleData.interactivity.modes)
+    let currentMode = this.state.particleParams.interactivity.events.onhover.mode
+    let modes = Object.keys(this.state.particleParams.interactivity.modes)
     let nextMode = modes[( modes.indexOf(currentMode) + 1) % modes.length]
 
-    const newState = this.state.particleData
+    const newState = this.state.particleParams
     newState.interactivity.events.onhover.mode = nextMode
-    this.setState({ particleData: newState })
+    this.setState({ particleParams: newState })
   }
 
   toggleLineLinks = () => {
-    const newState = this.state.particleData
+    const newState = this.state.particleParams
 
-    if (!this.state.lineLinksActive) {
+    if (!this.state.particleParams.particles.line_linked.enable) {
         newState.particles.line_linked.enable = true
-        newState.particles.line_linked.distance = this.props.forecast.nearestStormDistance
+        newState.particles.line_linked.distance = Math.round(this.props.forecast.apparentTemperature)
         this.setState({
-          particleData: newState,
-          lineLinksActive: true
+          particleParams: newState
         })
     } else {
         newState.particles.line_linked.enable = false
         this.setState({
-          particleData: newState,
-          lineLinksActive: false
+          particleParams: newState
         })
     }
   }
 
   changeParticleColor = () => {
-    const newState = this.state.particleData
+    const newState = this.state.particleParams
     newState.particles.color.value = "#FF0000"
-    this.setState({ particleData: newState })
+    this.setState({ particleParams: newState })
     console.log("TODO: fix particle color changer")
   }
 
   changeParticleSize = () => {
     console.log('TODO: change particle size')
+  }
+
+  changeParticleMovement = () => {
+    console.log('TODO: change particle movement')
   }
 
   changeBackgroundColor = () => {
@@ -304,11 +296,15 @@ class MiniDrawer extends React.Component {
             </Hidden>
             <ListItem button variant="outlined" onClick={this.toggleLineLinks}>
               <ListItemIcon><ChemicalWeapon /></ListItemIcon>
-              <ListItemText primary="Line Links" secondary={`closest storm: ${this.props.forecast.nearestStormDistance} miles`} />
+              <ListItemText primary="Apparent Temperature" secondary="links particles" />
             </ListItem>
             <ListItem button onClick={this.changeParticleSize}>
               <ListItemIcon><Album /></ListItemIcon>
               <ListItemText primary="Particle Size" secondary="particle size" />
+            </ListItem>
+            <ListItem button onClick={this.changeParticleMovement}>
+              <ListItemIcon><Album /></ListItemIcon>
+              <ListItemText primary="Particle Movement" secondary="particle movement" />
             </ListItem>
             <ListItem button onClick={this.changeParticleColor}>
               <ListItemIcon><Palette /></ListItemIcon>
@@ -325,12 +321,12 @@ class MiniDrawer extends React.Component {
             <ListItem button onClick={this.toggleClickMode}>
               <ListItemIcon><CursorPointer /></ListItemIcon>
               <ListItemText primary="When you click"
-                secondary={this.state.particleData.interactivity.events.onclick.mode} />
+                secondary={this.state.particleParams.interactivity.events.onclick.mode} />
             </ListItem>
             <ListItem button onClick={this.toggleHoverMode}>
               <ListItemIcon><CursorPointer /></ListItemIcon>
               <ListItemText primary="When you hover"
-                secondary={this.state.particleData.interactivity.events.onhover.mode} />
+                secondary={this.state.particleParams.interactivity.events.onhover.mode} />
             </ListItem>
 
           </List>
@@ -340,7 +336,7 @@ class MiniDrawer extends React.Component {
 
             <ParticlesContainer
               backgroundColor={this.state.particleBackgroundColor}
-              params={this.state.particleData} />
+              params={this.state.particleParams} />
 
         </main>
       </div>
