@@ -195,7 +195,9 @@ class ForecastGetter extends React.Component {
                 <GithubCircle className={ classes.octicon }/>
               </a>
             </Typography>
-            <Typography paragraph>Made with React and Material-UI</Typography>
+            <Typography paragraph>Made with React, Material-UI, and
+              <a href="https://github.com/VincentGarreau/particles.js" target="blank">particles.js</a>
+            </Typography>
           </CardContent>
         </Collapse>
       </Card>

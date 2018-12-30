@@ -151,7 +151,7 @@ class MiniDrawer extends React.Component {
     this.state = {
       open: false,
       lineLinksActive: false,
-      particleBackgroundColor: `hsl(${Math.abs(Math.round(2 * this.props.forecast.temperature))}, 10%, 10%)`,
+      particleBackgroundColor: `hsl(${Math.abs(Math.round(2 * this.props.forecast.temperature))}, 80%, 95%)`,
       particleParams: this.props.particleParams
     }
   }
@@ -171,7 +171,7 @@ class MiniDrawer extends React.Component {
 
     if (nextMode === "bubble") nextMode = modes[( modes.indexOf(currentMode) + 2) % modes.length]
 
-    const newState = this.state.particleParams
+    let newState = this.state.particleParams
     newState.interactivity.events.onclick.mode = nextMode
     this.setState({ particleParams: newState })
   }
@@ -181,17 +181,18 @@ class MiniDrawer extends React.Component {
     let modes = Object.keys(this.state.particleParams.interactivity.modes)
     let nextMode = modes[( modes.indexOf(currentMode) + 1) % modes.length]
 
-    const newState = this.state.particleParams
+    let newState = this.state.particleParams
     newState.interactivity.events.onhover.mode = nextMode
     this.setState({ particleParams: newState })
   }
 
   toggleLineLinks = () => {
-    const newState = this.state.particleParams
+    let newState = this.state.particleParams
 
     if (!this.state.particleParams.particles.line_linked.enable) {
         newState.particles.line_linked.enable = true
-        newState.particles.line_linked.distance = Math.round(this.props.forecast.apparentTemperature)
+        newState.particles.line_linked.distance = this.props.forecast.temperature
+        newState.particles.line_linked.color = `#${Math.floor(Math.random() * 0x1000000).toString(16).padStart(6, 0)}`
         this.setState({
           particleParams: newState
         })
@@ -204,28 +205,39 @@ class MiniDrawer extends React.Component {
   }
 
   changeParticleColor = () => {
-    const newState = this.state.particleParams
-    newState.particles.color.value = "#FF0000"
+    let newState = this.state.particleParams
+    newState.particles.color.value = `#${Math.floor(Math.random() * 0x1000000).toString(16).padStart(6, 0)}`
     this.setState({ particleParams: newState })
-    console.log("TODO: fix particle color changer")
   }
 
   changeParticleSize = () => {
-    console.log('TODO: change particle size')
+    let newState = this.state.particleParams
+    newState.particles.size.value = Math.floor(Math.random() * (this.props.forecast.temperature * 4))
+    newState.particles.shape.stroke.width = Math.random() * 10
+    this.setState({ particleParams: newState })
   }
 
   changeParticleMovement = () => {
-    console.log('TODO: change particle movement')
+    let newState = this.state.particleParams
+
+    let directions = ["none", "top", "top-right", "right", "bottom-right", "bottom", "bottom-left", "left", "top-left"]
+    newState.particles.move.direction = directions[Math.floor(Math.random() * 9)]
+
+    newState.particles.move.random = Math.random() >= 0.5
+    newState.particles.move.straight = Math.random() >= 0.5
+    newState.particles.move.speed = Math.random() * 15
+    newState.particles.move.attract.enable = Math.random() >= 0.5
+
+    this.setState({ particleParams: newState })
   }
 
   changeBackgroundColor = () => {
     const hslString = `hsla(
       ${Math.abs(Math.round(this.props.forecast.windBearing))},
       ${Math.abs(Math.round(100 - this.props.forecast.windGust))}%,
-      ${Math.abs(Math.round(100 - this.props.forecast.windSpeed))}%,
+      ${Math.abs(Math.round(70 - this.props.forecast.windSpeed))}%,
       ${Math.random().toFixed(2)}
       )`
-      console.log('hsl color', hslString)
 
     this.setState({ particleBackgroundColor: hslString })
   }
@@ -257,9 +269,9 @@ class MiniDrawer extends React.Component {
             <Typography variant="h4" color="inherit" noWrap className={classes.appBarTitle}>
               drizzl.
             </Typography>
-            <Hidden only="xs">
+            <Hidden only={['xs', 'sm']}>
               <Typography variant="h6" color="textSecondary" className={classes.appBarInfo}>
-                {this.props.forecast.summary} at {this.props.address} on {new Date(this.props.forecast.time * 1000).toUTCString()}
+                {this.props.forecast.summary} at {this.props.address}.
               </Typography>
             </Hidden>
             <div className={classes.grow} />

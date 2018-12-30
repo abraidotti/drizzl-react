@@ -1,20 +1,20 @@
 module.exports = {
   "particles": {
     "number": {
-      "value": 100,
+      "value": 60,
       "density": {
         "enable": true,
         "value_area": 800
       }
     },
     "color": {
-      "value": "#666"
+      "value": "#02c4f9"
     },
     "shape": {
-      "type": "circle",
+      "type": ["circle"],
       "stroke": {
-        "width": 0,
-        "color": "#000000"
+        "width": 2,
+        "color": "#f486e0"
       },
       "polygon": {
         "nb_sides": 5
@@ -29,7 +29,7 @@ module.exports = {
       "value": 0.5,
       "random": true,
       "anim": {
-        "enable": false,
+        "enable": true,
         "speed": 1,
         "opacity_min": 0.1,
         "sync": false
@@ -40,9 +40,9 @@ module.exports = {
       "random": true,
       "anim": {
         "enable": true,
-        "speed": 40,
+        "speed": 20,
         "size_min": 0.1,
-        "sync": false
+        "sync": true
       }
     },
     "line_linked": {
@@ -50,11 +50,11 @@ module.exports = {
       "distance": 500,
       "color": "#666",
       "opacity": 0.4,
-      "width": 2
+      "width": 0.2
     },
     "move": {
       "enable": true,
-      "speed": 6,
+      "speed": 5,
       "direction": "bottom",
       "random": false,
       "straight": false,
