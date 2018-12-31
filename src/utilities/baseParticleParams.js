@@ -13,7 +13,7 @@ module.exports = {
     "shape": {
       "type": ["circle"],
       "stroke": {
-        "width": 2,
+        "width": 7,
         "color": "#f486e0"
       },
       "polygon": {
@@ -49,7 +49,7 @@ module.exports = {
       "enable": false,
       "distance": 500,
       "color": "#666",
-      "opacity": 0.4,
+      "opacity": 0.8,
       "width": 0.2
     },
     "move": {

@@ -1,40 +1,41 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import ParticlesContainer from './ParticlesContainer'
 import classNames from 'classnames'
 import { withStyles } from '@material-ui/core/styles'
-import Drawer from '@material-ui/core/Drawer'
 import AppBar from '@material-ui/core/AppBar'
-import Toolbar from '@material-ui/core/Toolbar'
-import List from '@material-ui/core/List'
-import Hidden from '@material-ui/core/Hidden';
 import CssBaseline from '@material-ui/core/CssBaseline'
-import Typography from '@material-ui/core/Typography'
-import Divider from '@material-ui/core/Divider'
-import IconButton from '@material-ui/core/IconButton'
-import MenuIcon from '@material-ui/icons/Menu'
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
+import Divider from '@material-ui/core/Divider'
+import Drawer from '@material-ui/core/Drawer'
+import { fade } from '@material-ui/core/styles/colorManipulator'
+import Hidden from '@material-ui/core/Hidden';
+import IconButton from '@material-ui/core/IconButton'
+import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
-import { fade } from '@material-ui/core/styles/colorManipulator'
+import MenuIcon from '@material-ui/icons/Menu'
+import Toolbar from '@material-ui/core/Toolbar'
+import Typography from '@material-ui/core/Typography'
 
-import { Album, ChemicalWeapon, CursorPointer, FormatColorFill, Palette } from 'mdi-material-ui'
-
-import ParticlesContainer from './ParticlesContainer'
+import { Album, WeatherHurricane, ChemicalWeapon, CursorPointer, WeatherWindy, Palette } from 'mdi-material-ui'
 
 const drawerWidth = 280
 
 const styles = theme => ({
-  root: {
-    display: 'flex',
-  },
+
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
+  },
+  appBarInfo: {
+    flexGrow: 1,
+    float: "right"
   },
   appBarShift: {
     marginLeft: drawerWidth,
@@ -49,16 +50,9 @@ const styles = theme => ({
     flexGrow: 1,
     float: "right"
   },
-  appBarInfo: {
+  content: {
     flexGrow: 1,
-    float: "right"
-  },
-  menuButton: {
-    marginLeft: 12,
-    marginRight: 36,
-  },
-  hide: {
-    display: 'none',
+    padding: theme.spacing.unit,
   },
   drawer: {
     width: drawerWidth,
@@ -83,6 +77,42 @@ const styles = theme => ({
       width: theme.spacing.unit * 9 + 1,
     },
   },
+  hide: {
+    display: 'none',
+  },
+  inputInput: {
+    paddingTop: theme.spacing.unit,
+    paddingRight: theme.spacing.unit,
+    paddingBottom: theme.spacing.unit,
+    paddingLeft: theme.spacing.unit * 10,
+    transition: theme.transitions.create('width'),
+    width: '100%',
+    [theme.breakpoints.up('sm')]: {
+      width: 120,
+      '&:focus': {
+        width: 200,
+      },
+    },
+  },
+  inputRoot: {
+    color: 'inherit',
+    width: '100%',
+  },
+  menuButton: {
+    marginLeft: 12,
+    marginRight: 36,
+  },
+  progress: {
+    position: 'absolute',
+    top:0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    margin: 'auto'
+  },
+  root: {
+    display: 'flex',
+  },
   search: {
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
@@ -106,42 +136,12 @@ const styles = theme => ({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  inputRoot: {
-    color: 'inherit',
-    width: '100%',
-  },
-  inputInput: {
-    paddingTop: theme.spacing.unit,
-    paddingRight: theme.spacing.unit,
-    paddingBottom: theme.spacing.unit,
-    paddingLeft: theme.spacing.unit * 10,
-    transition: theme.transitions.create('width'),
-    width: '100%',
-    [theme.breakpoints.up('sm')]: {
-      width: 120,
-      '&:focus': {
-        width: 200,
-      },
-    },
-  },
   toolbar: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-end',
     padding: '0 8px',
     ...theme.mixins.toolbar,
-  },
-  content: {
-    flexGrow: 1,
-    padding: theme.spacing.unit,
-  },
-  progress: {
-    position: 'absolute',
-    top:0,
-    bottom: 0,
-    left: 0,
-    right: 0,
-    margin: 'auto'
   },
 })
 
@@ -151,7 +151,7 @@ class MiniDrawer extends React.Component {
     this.state = {
       open: false,
       lineLinksActive: false,
-      particleBackgroundColor: `hsl(${Math.abs(Math.round(2 * this.props.forecast.temperature))}, 80%, 95%)`,
+      particleBackgroundColor: `hsl(${Math.abs(Math.round(3 * this.props.forecast.temperature))}, 100%, 70%)`,
       particleParams: this.props.particleParams
     }
   }
@@ -162,6 +162,59 @@ class MiniDrawer extends React.Component {
 
   handleDrawerClose = () => {
     this.setState({ open: false })
+  }
+
+  changeBackgroundColor = () => {
+    const hslString = `hsla(
+      ${Math.abs(Math.round(this.props.forecast.windBearing))},
+      ${Math.abs(Math.round(100 - this.props.forecast.windGust))}%,
+      ${Math.abs(Math.round(70 - this.props.forecast.windSpeed))}%,
+      ${Math.random().toFixed(2)}
+      )`
+    this.setState({ particleBackgroundColor: hslString })
+  }
+
+  changeParticleColor = () => {
+    let newState = this.state.particleParams
+
+    newState.particles.color.value = {
+      r: Math.round(254 - (Math.random() * this.props.forecast.humidity * 5) * 100),
+      g: Math.round(254 - (Math.random() * this.props.forecast.humidity * 5) * 100),
+      b: Math.round(254 - (Math.random() * this.props.forecast.humidity * 5) * 100),
+    }
+
+    newState.particles.shape.stroke.color = `#${Math.floor(Math.random() * 0x1000000).toString(16).padStart(6, 0)}`
+    newState.particles.shape.stroke.width = (Math.random() * this.props.forecast.visibility).toFixed(2)
+    newState.particles.opacity.value = Math.random().toFixed(2)
+
+
+    console.log('color', newState.particles.color.value)
+    console.log('outline', newState.particles.shape.stroke.color)
+    console.log('outline width', newState.particles.shape.stroke.width)
+
+
+    this.setState({ particleParams: newState })
+  }
+
+  changeParticleMovement = () => {
+    let newState = this.state.particleParams
+
+    let directions = ["none", "top", "top-right", "right", "bottom-right", "bottom", "bottom-left", "left", "top-left"]
+    newState.particles.move.direction = directions[Math.floor(Math.random() * 9)]
+
+    newState.particles.move.random = Math.random() >= 0.5
+    newState.particles.move.straight = Math.random() >= 0.5
+    newState.particles.move.speed = Math.random() * this.props.forecast.windGust
+    newState.particles.move.attract.enable = Math.random() >= 0.5
+
+    this.setState({ particleParams: newState })
+  }
+
+  changeParticleSize = () => {
+    let newState = this.state.particleParams
+    newState.particles.size.value = Math.floor(Math.random() * (this.props.forecast.temperature * 4))
+    newState.particles.shape.stroke.width = Math.random() * 10
+    this.setState({ particleParams: newState })
   }
 
   toggleClickMode = () => {
@@ -191,7 +244,6 @@ class MiniDrawer extends React.Component {
 
     if (!this.state.particleParams.particles.line_linked.enable) {
         newState.particles.line_linked.enable = true
-        newState.particles.line_linked.distance = this.props.forecast.temperature
         newState.particles.line_linked.color = `#${Math.floor(Math.random() * 0x1000000).toString(16).padStart(6, 0)}`
         this.setState({
           particleParams: newState
@@ -203,45 +255,6 @@ class MiniDrawer extends React.Component {
         })
     }
   }
-
-  changeParticleColor = () => {
-    let newState = this.state.particleParams
-    newState.particles.color.value = `#${Math.floor(Math.random() * 0x1000000).toString(16).padStart(6, 0)}`
-    this.setState({ particleParams: newState })
-  }
-
-  changeParticleSize = () => {
-    let newState = this.state.particleParams
-    newState.particles.size.value = Math.floor(Math.random() * (this.props.forecast.temperature * 4))
-    newState.particles.shape.stroke.width = Math.random() * 10
-    this.setState({ particleParams: newState })
-  }
-
-  changeParticleMovement = () => {
-    let newState = this.state.particleParams
-
-    let directions = ["none", "top", "top-right", "right", "bottom-right", "bottom", "bottom-left", "left", "top-left"]
-    newState.particles.move.direction = directions[Math.floor(Math.random() * 9)]
-
-    newState.particles.move.random = Math.random() >= 0.5
-    newState.particles.move.straight = Math.random() >= 0.5
-    newState.particles.move.speed = Math.random() * 15
-    newState.particles.move.attract.enable = Math.random() >= 0.5
-
-    this.setState({ particleParams: newState })
-  }
-
-  changeBackgroundColor = () => {
-    const hslString = `hsla(
-      ${Math.abs(Math.round(this.props.forecast.windBearing))},
-      ${Math.abs(Math.round(100 - this.props.forecast.windGust))}%,
-      ${Math.abs(Math.round(70 - this.props.forecast.windSpeed))}%,
-      ${Math.random().toFixed(2)}
-      )`
-
-    this.setState({ particleBackgroundColor: hslString })
-  }
-
 
   render() {
     const { classes, theme } = this.props
@@ -312,19 +325,19 @@ class MiniDrawer extends React.Component {
             </ListItem>
             <ListItem button onClick={this.changeParticleSize}>
               <ListItemIcon><Album /></ListItemIcon>
-              <ListItemText primary="Particle Size" secondary="particle size" />
+              <ListItemText primary="Actual Temperature" secondary="particle size" />
             </ListItem>
             <ListItem button onClick={this.changeParticleMovement}>
-              <ListItemIcon><Album /></ListItemIcon>
-              <ListItemText primary="Particle Movement" secondary="particle movement" />
+              <ListItemIcon><WeatherHurricane /></ListItemIcon>
+              <ListItemText primary="Wind Gusts" secondary="particle movement" />
             </ListItem>
             <ListItem button onClick={this.changeParticleColor}>
               <ListItemIcon><Palette /></ListItemIcon>
-              <ListItemText primary="Particle Color" secondary="particle color" />
+              <ListItemText primary="Dew Point" secondary="particle color" />
             </ListItem>
             <ListItem button onClick={this.changeBackgroundColor}>
-              <ListItemIcon><FormatColorFill /></ListItemIcon>
-              <ListItemText primary="Background Color" secondary="based on wind speeds" />
+              <ListItemIcon><WeatherWindy /></ListItemIcon>
+              <ListItemText primary="Wind Bearing" secondary="background color" />
             </ListItem>
 
           </List>

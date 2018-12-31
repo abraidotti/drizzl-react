@@ -4,40 +4,37 @@ import { withStyles } from "@material-ui/core/styles";
 import classnames from "classnames";
 import Button from "@material-ui/core/Button";
 import Card from "@material-ui/core/Card";
-import CardHeader from "@material-ui/core/CardHeader";
-import CardContent from "@material-ui/core/CardContent";
 import CardActions from "@material-ui/core/CardActions";
+import CardContent from "@material-ui/core/CardContent";
+import CardHeader from "@material-ui/core/CardHeader";
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Collapse from "@material-ui/core/Collapse";
-import IconButton from "@material-ui/core/IconButton";
-import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import Input from "@material-ui/core/Input";
 import { GithubCircle } from 'mdi-material-ui'
+import IconButton from "@material-ui/core/IconButton";
+import Input from "@material-ui/core/Input";
+import Typography from "@material-ui/core/Typography";
 
 import { getParticleParams } from '../utilities/getParticleParams';
-
 import MiniParticlesContainer from "./MiniParticlesContainer";
-
-import CircularProgress from '@material-ui/core/CircularProgress';
 
 import Geocode from "react-geocode";
 Geocode.setApiKey(`${process.env.REACT_APP_GMAPS_API_KEY}`);
 
 const styles = theme => ({
+  actions: {
+    display: "flex"
+  },
   button: {
     margin: theme.spacing.unit,
     float: "right"
   },
+  buttonText: {
+    fontFamily: "'Lily Script One', cursive"
+  },
   card: {
     maxWidth: 360,
     margin: "50px auto"
-  },
-  media: {
-    height: 0,
-    paddingTop: "56.25%" // 16:9
-  },
-  actions: {
-    display: "flex"
   },
   expand: {
     transform: "rotate(0deg)",
@@ -57,16 +54,18 @@ const styles = theme => ({
     float: "left",
     width: 320
   },
-  buttonText: {
-    fontFamily: "'Lily Script One', cursive"
+  media: {
+    height: 0,
+    paddingTop: "56.25%" // 16:9
+  },
+  octicon: {
+    marginLeft: "5px",
+    marginBottom: "-5px"
   },
   progress: {
     margin: theme.spacing.unit * 2,
     float: "right"
   },
-  octicon: {
-    marginBottom: "-5px"
-  }
 });
 
 class ForecastGetter extends React.Component {
@@ -195,7 +194,7 @@ class ForecastGetter extends React.Component {
                 <GithubCircle className={ classes.octicon }/>
               </a>
             </Typography>
-            <Typography paragraph>Made with React, Material-UI, and
+            <Typography paragraph>Made with React, Material-UI, and <></>
               <a href="https://github.com/VincentGarreau/particles.js" target="blank">particles.js</a>
             </Typography>
           </CardContent>
