@@ -102,7 +102,7 @@ class ForecastGetter extends React.Component {
             gotResponse: true,
             error: "" });
           fetch(
-            `https://cors-anywhere.herokuapp.com/https://api.darksky.net/forecast/${
+            `https://api.darksky.net/forecast/${
               process.env.REACT_APP_DARKSKY_API_KEY
             }/${response.results[0].geometry.location.lat},${
               response.results[0].geometry.location.lng
@@ -112,7 +112,7 @@ class ForecastGetter extends React.Component {
               headers: {
                 "Content-Type": "application/json"
               },
-              mode: "cors"
+              mode: "no-cors"
             }
           )
             .then(results => results.json())
