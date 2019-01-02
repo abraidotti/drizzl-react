@@ -1,3 +1,11 @@
-# drizzl-react
+### drizzl-react
 
-Jan 2 2019 - WIP
+drizzl is a generative weather art application in which a user can input a location and see a resulting animation powered by that location's present weather forecast.
+
+Version 2 (this one):
+- Material UI and [particles.js](https://vincentgarreau.com/particles.js/) components powered by create-react-app's build server
+- available here: http://alessandro.braidotti/drizzl-react
+
+Version 1:
+- vanilla HTML/CSS/JS, powered by a Node/Express server
+- available here: https://drizzl.herokuapp.com
