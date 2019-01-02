@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ForecastGetter from './components/ForecastGetter'
-import MiniDrawer from './components/MiniDrawer'
+import Console from './components/Console'
 import './index.css';
 
 class App extends Component {
@@ -32,7 +32,7 @@ class App extends Component {
                           sendForecast={this.getForecast}
                         />
     } else {
-      activeComponent = <MiniDrawer
+      activeComponent = <Console
                           forecast={this.state.forecast}
                           address={this.state.formattedAddress}
                           particleParams={this.state.particleParams}

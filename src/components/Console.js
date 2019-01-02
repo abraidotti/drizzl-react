@@ -20,7 +20,15 @@ import MenuIcon from '@material-ui/icons/Menu'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 
-import { Album, WeatherHurricane, ChemicalWeapon, CursorPointer, WeatherWindy, Palette } from 'mdi-material-ui'
+import {
+  Album,
+  ChemicalWeapon,
+  CursorPointer,
+  Information,
+  Palette,
+  WeatherHurricane,
+  WeatherWindy
+} from 'mdi-material-ui'
 
 const drawerWidth = 280
 
@@ -145,7 +153,7 @@ const styles = theme => ({
   },
 })
 
-class MiniDrawer extends React.Component {
+class Console extends React.Component {
   constructor(props){
     super(props)
     this.state = {
@@ -312,16 +320,19 @@ class MiniDrawer extends React.Component {
           <Divider />
 
           <List>
-            <Hidden only={['sm', 'md', 'lg', 'xl']}>
+            <Hidden only={['md', 'lg', 'xl']}>
               <ListItem >
-                <ListItemIcon><CursorPointer /></ListItemIcon>
+                <ListItemIcon><Information /></ListItemIcon>
                 <ListItemText primary="Results for:"
                   secondary={this.props.address} />
               </ListItem>
             </Hidden>
             <ListItem button variant="outlined" onClick={this.toggleLineLinks}>
               <ListItemIcon><ChemicalWeapon /></ListItemIcon>
-              <ListItemText primary="Apparent Temperature" secondary="links particles" />
+              <ListItemText
+                primary="Apparent Temperature"
+                secondary={this.state.particleParams.particles.line_linked.distance} />
+
             </ListItem>
             <ListItem button onClick={this.changeParticleSize}>
               <ListItemIcon><Album /></ListItemIcon>
@@ -369,9 +380,9 @@ class MiniDrawer extends React.Component {
   }
 }
 
-MiniDrawer.propTypes = {
+Console.propTypes = {
   classes: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
 }
 
-export default withStyles(styles, { withTheme: true })(MiniDrawer)
+export default withStyles(styles, { withTheme: true })(Console)
