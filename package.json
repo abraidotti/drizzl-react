@@ -1,10 +1,13 @@
 {
-  "name": "drizzl-react",
+  "name": "drizzl",
+  "homepage": "https://abraidotti.github.io/drizzl-react",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
     "@material-ui/core": "^3.6.1",
     "@material-ui/icons": "^3.0.1",
+    "env-cmd": "^8.0.2",
+    "gh-pages": "^2.0.1",
     "mdi-material-ui": "^5.7.0",
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
@@ -16,7 +19,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "yarn run build",
+    "deploy": "env-cmd .env gh-pages -b master -d build"
   },
   "eslintConfig": {
     "extends": "react-app"
